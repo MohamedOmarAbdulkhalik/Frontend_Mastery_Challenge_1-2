@@ -42,9 +42,8 @@ function add_emp() {
     deleteButton.setAttribute("id", `delete-${counter}`);
     deleteButton.setAttribute("onclick", `delete_emp(${counter})`);
 
+    empDiv.append(nameSpan, roleSpan, editButton, deleteButton);
 
-    empDiv.append(nameSpan,roleSpan,editButton,deleteButton)
-  
     switch (statusText) {
       case "active":
         empDiv.classList.add("active");
@@ -61,7 +60,7 @@ function add_emp() {
 
     content.appendChild(empDiv);
 
-    console.log(nameText, roleText, statusText, counter, empDiv);
+    //console.log(nameText, roleText, statusText, counter, empDiv);
 
     nameField.value = "";
     roleField.value = "";
@@ -73,9 +72,93 @@ function add_emp() {
 }
 
 function edit_emp(id) {
-  console.log(id, "hello");
+
+  const empDiv = document.getElementById(`emp-${id}`);
+
+  const nameSpan = document.getElementById(`name-${id}`);
+  const roleSpan = document.getElementById(`role-${id}`);
+  const statusList =  document.getElementById("status").cloneNode(true);
+
+  const editButton = document.getElementById(`edit-${id}`);
+
+  const statuse = empDiv.getAttribute("class");
+  console.log(statuse)
+  console.log(statusList)
+  editButton.setAttribute("value", "Save");
+  editButton.setAttribute("onclick", `save(${id})`);
+
+  empDiv.removeChild(nameSpan);
+  empDiv.removeChild(roleSpan);
+
+  const nameField = document.createElement("input");
+  nameField.setAttribute("type", "text");
+  nameField.setAttribute("value", nameSpan.innerText);
+  nameField.setAttribute("id", `nameField-${id}`);
+
+  const roleField = document.createElement("input");
+  roleField.setAttribute("type", "text");
+  roleField.setAttribute("value", roleSpan.innerText);
+  roleField.setAttribute("id", `roleField-${id}`);
+
+  statusList.setAttribute("id",`status-${id}`)
+  statusList.value =statuse;
+  editButton.before(nameField, roleField, statusList);
+  //console.log(empDiv, nameSpan, roleSpan, editButton, statuse);
 }
 
+function save(id) {
+
+  var empName = document.getElementById(`nameField-${id}`)
+  var empRole = document.getElementById(`roleField-${id}`)
+  var empSatatus = document.getElementById(`status-${id}`)
+  const editButton = document.getElementById(`edit-${id}`);
+  const empDiv = document.getElementById(`emp-${id}`);
+
+  var nameText = empName.value;
+  var roleText = empRole.value;
+  var statuseVale = empSatatus.value;
+
+
+
+  var nameSpan = document.createElement("span"); //id
+  nameSpan.setAttribute("id", `name-${id}`);
+  nameSpan.innerText = nameText;
+
+  var roleSpan = document.createElement("span");
+  roleSpan.setAttribute("id", `role-${id}`);
+  roleSpan.innerText = roleText;
+
+  switch (statuseVale) {
+    case "active":
+      empDiv.setAttribute("class","active")
+      // empDiv.classList.add("active");
+      break;
+    case "onLeave":
+      // empDiv.classList.add("onLeave");
+      empDiv.setAttribute("class","onLeave")
+
+      break;
+    case "terminated":
+      // empDiv.classList.add("terminated");
+      empDiv.setAttribute("class","terminated")
+
+      break;
+  }
+
+  
+  empDiv.removeChild(empName);
+    empDiv.removeChild(empRole);
+  empDiv.removeChild(empSatatus);
+
+  editButton.before(nameSpan);
+  editButton.before(roleSpan);
+
+  editButton.setAttribute("onclick",`edit_emp(${id})`)
+  editButton.setAttribute("value","Edit")
+
+//empDiv.setAttribute("class",)
+
+}
 function delete_emp(id) {
   console.log(id, "delete");
   var element = document.getElementById(`emp-${id}`);
