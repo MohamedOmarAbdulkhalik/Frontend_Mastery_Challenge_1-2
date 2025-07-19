@@ -1,6 +1,7 @@
 const content = document.getElementsByClassName("table")[0];
 document.querySelector("#status").value = "";
 let deletedArray = [];
+let empsArray = [];
 
 let counter = 0;
 function add_emp() {
@@ -16,55 +17,59 @@ function add_emp() {
 
   if (nameText != "" && roleText != "" && statusText != "") {
     // validate empty fields
+    if (content.classList.contains("emp")) {
+      // create an employee container
+      var empDiv = document.createElement("div");
+      empDiv.setAttribute("id", `emp-${counter}`);
 
-    // create an employee container
-    var empDiv = document.createElement("div");
-    empDiv.setAttribute("id", `emp-${counter}`);
+      // create employee's data one by one
+      var nameSpan = document.createElement("span"); //id
+      nameSpan.setAttribute("id", `name-${counter}`);
+      nameSpan.innerText = nameText;
 
-    // create employee's data one by one
-    var nameSpan = document.createElement("span"); //id
-    nameSpan.setAttribute("id", `name-${counter}`);
-    nameSpan.innerText = nameText;
+      var roleSpan = document.createElement("span");
+      roleSpan.setAttribute("id", `role-${counter}`);
+      roleSpan.innerText = roleText;
 
-    var roleSpan = document.createElement("span");
-    roleSpan.setAttribute("id", `role-${counter}`);
-    roleSpan.innerText = roleText;
+      var editButton = document.createElement("input");
+      editButton.setAttribute("type", "button");
+      editButton.setAttribute("value", "Edit");
+      editButton.setAttribute("id", `edit-${counter}`);
+      editButton.setAttribute("onclick", `edit_emp(${counter})`);
 
-    var editButton = document.createElement("input");
-    editButton.setAttribute("type", "button");
-    editButton.setAttribute("value", "Edit");
-    editButton.setAttribute("id", `edit-${counter}`);
-    editButton.setAttribute("onclick", `edit_emp(${counter})`);
+      var deleteButton = document.createElement("input");
+      deleteButton.setAttribute("type", "button");
+      deleteButton.setAttribute("value", "Delete");
+      deleteButton.setAttribute("id", `delete-${counter}`);
+      deleteButton.setAttribute("onclick", `delete_emp(${counter})`);
 
-    var deleteButton = document.createElement("input");
-    deleteButton.setAttribute("type", "button");
-    deleteButton.setAttribute("value", "Delete");
-    deleteButton.setAttribute("id", `delete-${counter}`);
-    deleteButton.setAttribute("onclick", `delete_emp(${counter})`);
+      empDiv.append(nameSpan, roleSpan, editButton, deleteButton);
 
-    empDiv.append(nameSpan, roleSpan, editButton, deleteButton);
+      switch (statusText) {
+        case "active":
+          empDiv.classList.add("active");
+          break;
+        case "onLeave":
+          empDiv.classList.add("onLeave");
 
-    switch (statusText) {
-      case "active":
-        empDiv.classList.add("active");
-        break;
-      case "onLeave":
-        empDiv.classList.add("onLeave");
+          break;
+        case "terminated":
+          empDiv.classList.add("terminated");
 
-        break;
-      case "terminated":
-        empDiv.classList.add("terminated");
+          break;
+      }
 
-        break;
+      content.appendChild(empDiv);
+      //empsArray.push(empDiv)
+
+      //console.log(nameText, roleText, statusText, counter, empDiv);
+
+      // nameField.value = "";
+      // roleField.value = "";
+      // statusField.value = "";
+    }else{
+      window.alert("go to emps page")
     }
-
-    content.appendChild(empDiv);
-
-    //console.log(nameText, roleText, statusText, counter, empDiv);
-
-    nameField.value = "";
-    roleField.value = "";
-    statusField.value = "";
   } else {
     window.alert("empty Fields");
   }
@@ -149,14 +154,51 @@ function save(id) {
 
   editButton.setAttribute("onclick", `edit_emp(${id})`);
   editButton.setAttribute("value", "Edit");
-
 }
 
-
 function delete_emp(id) {
-
   const empDiv = document.getElementById(`emp-${id}`);
+  deletedArray.push(empDiv);
+  content.removeChild(empDiv);
 
+  // console.log(deletedArray[0]);
+}
 
-  console.log(element);
+function show_trash() {
+  content.classList.add("del");
+  content.classList.remove("emp");
+  const temp = [];
+
+  for (var i = 0; i < content.children.length; i++) {
+    temp.push(content.children[i]);
+  }
+
+  for (var i = 0; i < temp.length; i++) {
+    empsArray.push(temp[i]);
+    content.removeChild(temp[i]);
+  }
+
+  for (var i = 0; i < deletedArray.length; i++) {
+    content.appendChild(deletedArray[i]);
+  }
+}
+
+function show_emps() {
+  content.classList.add("emp");
+  content.classList.remove("del");
+
+  const temp = [];
+
+  for (var i = 0; i < content.children.length; i++) {
+    temp.push(content.children[i]);
+  }
+
+  for (var i = 0; i < temp.length; i++) {
+    deletedArray.push(temp[i]);
+    content.removeChild(temp[i]);
+  }
+
+  for (var i = 0; i < empsArray.length; i++) {
+    content.appendChild(empsArray[i]);
+  }
 }
