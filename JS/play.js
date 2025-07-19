@@ -65,25 +65,23 @@ function add_emp() {
     nameField.value = "";
     roleField.value = "";
     statusField.value = "";
-
   } else {
     window.alert("empty Fields");
   }
 }
 
 function edit_emp(id) {
-
   const empDiv = document.getElementById(`emp-${id}`);
 
   const nameSpan = document.getElementById(`name-${id}`);
   const roleSpan = document.getElementById(`role-${id}`);
-  const statusList =  document.getElementById("status").cloneNode(true);
+  const statusList = document.getElementById("status").cloneNode(true);
 
   const editButton = document.getElementById(`edit-${id}`);
 
   const statuse = empDiv.getAttribute("class");
-  console.log(statuse)
-  console.log(statusList)
+  console.log(statuse);
+  console.log(statusList);
   editButton.setAttribute("value", "Save");
   editButton.setAttribute("onclick", `save(${id})`);
 
@@ -100,25 +98,22 @@ function edit_emp(id) {
   roleField.setAttribute("value", roleSpan.innerText);
   roleField.setAttribute("id", `roleField-${id}`);
 
-  statusList.setAttribute("id",`status-${id}`)
-  statusList.value =statuse;
+  statusList.setAttribute("id", `status-${id}`);
+  statusList.value = statuse;
   editButton.before(nameField, roleField, statusList);
   //console.log(empDiv, nameSpan, roleSpan, editButton, statuse);
 }
 
 function save(id) {
-
-  var empName = document.getElementById(`nameField-${id}`)
-  var empRole = document.getElementById(`roleField-${id}`)
-  var empSatatus = document.getElementById(`status-${id}`)
+  var empName = document.getElementById(`nameField-${id}`);
+  var empRole = document.getElementById(`roleField-${id}`);
+  var empSatatus = document.getElementById(`status-${id}`);
   const editButton = document.getElementById(`edit-${id}`);
   const empDiv = document.getElementById(`emp-${id}`);
 
   var nameText = empName.value;
   var roleText = empRole.value;
   var statuseVale = empSatatus.value;
-
-
 
   var nameSpan = document.createElement("span"); //id
   nameSpan.setAttribute("id", `name-${id}`);
@@ -130,37 +125,38 @@ function save(id) {
 
   switch (statuseVale) {
     case "active":
-      empDiv.setAttribute("class","active")
+      empDiv.setAttribute("class", "active");
       // empDiv.classList.add("active");
       break;
     case "onLeave":
       // empDiv.classList.add("onLeave");
-      empDiv.setAttribute("class","onLeave")
+      empDiv.setAttribute("class", "onLeave");
 
       break;
     case "terminated":
       // empDiv.classList.add("terminated");
-      empDiv.setAttribute("class","terminated")
+      empDiv.setAttribute("class", "terminated");
 
       break;
   }
 
-  
   empDiv.removeChild(empName);
-    empDiv.removeChild(empRole);
+  empDiv.removeChild(empRole);
   empDiv.removeChild(empSatatus);
 
   editButton.before(nameSpan);
   editButton.before(roleSpan);
 
-  editButton.setAttribute("onclick",`edit_emp(${id})`)
-  editButton.setAttribute("value","Edit")
-
-//empDiv.setAttribute("class",)
+  editButton.setAttribute("onclick", `edit_emp(${id})`);
+  editButton.setAttribute("value", "Edit");
 
 }
+
+
 function delete_emp(id) {
-  console.log(id, "delete");
-  var element = document.getElementById(`emp-${id}`);
+
+  const empDiv = document.getElementById(`emp-${id}`);
+
+
   console.log(element);
 }
