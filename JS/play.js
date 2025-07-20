@@ -4,6 +4,12 @@ let deletedArray = [];
 let empsArray = [];
 
 let counter = 0;
+// content.addEventListener("onclick",()=>{
+//   console.log("Hay")
+
+// })
+// content.onclick = ()=>{
+// }
 function add_emp() {
   counter++;
   var nameField = document.getElementById("name");
@@ -67,8 +73,8 @@ function add_emp() {
       // nameField.value = "";
       // roleField.value = "";
       // statusField.value = "";
-    }else{
-      window.alert("go to emps page")
+    } else {
+      window.alert("go to emps page");
     }
   } else {
     window.alert("empty Fields");
@@ -165,6 +171,7 @@ function delete_emp(id) {
 }
 
 function show_trash() {
+  empsArray.length = 0;
   content.classList.add("del");
   content.classList.remove("emp");
   const temp = [];
@@ -181,24 +188,64 @@ function show_trash() {
   for (var i = 0; i < deletedArray.length; i++) {
     content.appendChild(deletedArray[i]);
   }
+
+  for (var i = 0; i < deletedArray.length; i++) {
+    const item = deletedArray[i];
+
+    const editBtn = item.querySelector(`#edit-${item.id.split("-")[1]}`);
+    const deleteBtn = item.querySelector(`#delete-${item.id.split("-")[1]}`);
+
+      editBtn.value = "Restore";
+      editBtn.onclick = function () {
+        empsArray.push(item);
+        deletedArray.splice(deletedArray.indexOf(item), 1);
+        content.removeChild(item);
+      };
+
+      deleteBtn.value = "Premenent Deletion";
+      deleteBtn.onclick = function () {
+        deletedArray.splice(deletedArray.indexOf(item), 1);
+        content.removeChild(item);
+      };
+    
+  }
 }
 
 function show_emps() {
-  content.classList.add("emp");
-  content.classList.remove("del");
+  if (!content.classList.contains("emp")) {
+    deletedArray.length = 0;
+    content.classList.add("emp");
+    content.classList.remove("del");
 
-  const temp = [];
+    const temp = [];
 
-  for (var i = 0; i < content.children.length; i++) {
-    temp.push(content.children[i]);
-  }
+    for (var i = 0; i < content.children.length; i++) {
+      temp.push(content.children[i]);
+    }
 
-  for (var i = 0; i < temp.length; i++) {
-    deletedArray.push(temp[i]);
-    content.removeChild(temp[i]);
-  }
+    for (var i = 0; i < temp.length; i++) {
+      deletedArray.push(temp[i]);
+      content.removeChild(temp[i]);
+    }
 
-  for (var i = 0; i < empsArray.length; i++) {
-    content.appendChild(empsArray[i]);
+    for (var i = 0; i < empsArray.length; i++) {
+      content.appendChild(empsArray[i]);
+    }
+
+    for (var i = 0; i < empsArray.length; i++) {
+      const item = empsArray[i];
+      const id = item.id.split("-")[1];
+
+      const editBtn = item.querySelector(`#edit-${id}`);
+      const deleteBtn = item.querySelector(`#delete-${id}`);
+
+      if (editBtn && deleteBtn) {
+        editBtn.value = "Edit";
+        editBtn.setAttribute("onclick", `edit_emp(${id})`);
+
+        deleteBtn.value = "Delete";
+        deleteBtn.setAttribute("onclick", `delete_emp(${id})`);
+      }
+    }
   }
 }
