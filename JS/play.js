@@ -56,7 +56,14 @@ function add_emp() {
       bonusButton.setAttribute("value", "Bonus");
       bonusButton.setAttribute("onclick", `add_bonus(${counter})`);
 
-      empDiv.append(nameSpan, roleSpan, editButton, deleteButton,salarySpan, bonusButton);
+      empDiv.append(
+        nameSpan,
+        roleSpan,
+        editButton,
+        deleteButton,
+        salarySpan,
+        bonusButton
+      );
 
       switch (statusText) {
         case "active":
@@ -74,6 +81,11 @@ function add_emp() {
 
       content.appendChild(empDiv);
       updatePayroll();
+
+      if (parseFloat(salaryValue) >= 100000) {
+        nameSpan.style.background = "lightgreen";
+        nameSpan.style.padding = "3px";
+      }
 
       //empsArray.push(empDiv)
 
@@ -258,8 +270,6 @@ function show_emps() {
   }
 }
 
-
-
 function add_bonus(id) {
   let percentage = prompt("Enter bonus percentage:");
   if (percentage !== null && !isNaN(percentage) && percentage !== "") {
@@ -276,15 +286,43 @@ function add_bonus(id) {
     bonusSpan.innerText = `Bonus: ${bonus.toFixed(2)} R`;
     bonusSpan.style.color = "deeppink";
   }
+  document.getElementById(`name-${id}`).style.background = "pink";
+
 }
-
-
 
 function updatePayroll() {
   let total = 0;
   for (let i = 0; i < content.children.length; i++) {
-    let salaryText = content.children[i].querySelector(`[id^='salary-']`).innerText;
+    let salaryText =
+      content.children[i].querySelector(`[id^='salary-']`).innerText;
     total += parseFloat(salaryText);
   }
   document.getElementById("totalPayroll").innerText = total + " R";
+}
+
+function applyFilter() {
+  let nameVal = document.getElementById("filterName").value.toLowerCase();
+  let roleVal = document.getElementById("filterRole").value.toLowerCase();
+  let minSalary =
+    parseFloat(document.getElementById("filterSalaryMin").value) || 0;
+  let maxSalary =
+    parseFloat(document.getElementById("filterSalaryMax").value) || Infinity;
+
+  for (let i = 0; i < content.children.length; i++) {
+    let emp = content.children[i];
+    let name = emp.querySelector(`[id^='name-']`).innerText.toLowerCase();
+    let role = emp.querySelector(`[id^='role-']`).innerText.toLowerCase();
+    let salary = parseFloat(emp.querySelector(`[id^='salary-']`).innerText);
+
+    if (
+      name.includes(nameVal) &&
+      role.includes(roleVal) &&
+      salary >= minSalary &&
+      salary <= maxSalary
+    ) {
+      emp.style.display = "block";
+    } else {
+      emp.style.display = "none";
+    }
+  }
 }
