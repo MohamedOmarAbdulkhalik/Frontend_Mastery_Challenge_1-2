@@ -326,3 +326,22 @@ function applyFilter() {
     }
   }
 }
+
+
+
+function searchEmployee() {
+  let searchVal = document.getElementById("searchName").value.toLowerCase();
+  let result = empsArray.find(emp => {
+    let name = emp.querySelector(`[id^='name-']`).innerText.toLowerCase();
+    return name === searchVal;
+  });
+
+  let resultDiv = document.getElementById("searchResult");
+  if (result) {
+    resultDiv.innerText = "Employee Found: " + result.querySelector(`[id^='role-']`).innerText;
+    resultDiv.style.color = "green";
+  } else {
+    resultDiv.innerText = "Employee Not Found!";
+    resultDiv.style.color = "red";
+  }
+}
