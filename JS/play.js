@@ -315,41 +315,37 @@ function add_bonus(id) {
 }
 
 function updatePayroll() {
-  let total = 0;
-  for (let i = 0; i < content.children.length; i++) {
-    let salaryText =
-      content.children[i].querySelector(`[id^='salary-']`).innerText;
-    total += parseFloat(salaryText);
-  }
+  let total = [...content.children]
+    .map(emp => parseFloat(emp.querySelector(`[id^='salary-']`).innerText))
+    .reduce((acc, val) => acc + val, 0);
+
   document.getElementById("totalPayroll").innerText = total + " R";
 }
 
 function applyFilter() {
   let nameVal = document.getElementById("filterName").value.toLowerCase();
   let roleVal = document.getElementById("filterRole").value.toLowerCase();
-  let minSalary =
-    parseFloat(document.getElementById("filterSalaryMin").value) || 0;
-  let maxSalary =
-    parseFloat(document.getElementById("filterSalaryMax").value) || Infinity;
+  let minSalary = parseFloat(document.getElementById("filterSalaryMin").value) || 0;
+  let maxSalary = parseFloat(document.getElementById("filterSalaryMax").value) || Infinity;
 
-  for (let i = 0; i < content.children.length; i++) {
-    let emp = content.children[i];
-    let name = emp.querySelector(`[id^='name-']`).innerText.toLowerCase();
-    let role = emp.querySelector(`[id^='role-']`).innerText.toLowerCase();
-    let salary = parseFloat(emp.querySelector(`[id^='salary-']`).innerText);
+  [...content.children].forEach(emp => {
+    emp.style.display = "none"; // إخفاء الكل أولاً
+  });
 
-    if (
-      name.includes(nameVal) &&
-      role.includes(roleVal) &&
-      salary >= minSalary &&
-      salary <= maxSalary
-    ) {
-      emp.style.display = "block";
-    } else {
-      emp.style.display = "none";
-    }
-  }
+  [...content.children]
+    .filter(emp => {
+      let name = emp.querySelector(`[id^='name-']`).innerText.toLowerCase();
+      let role = emp.querySelector(`[id^='role-']`).innerText.toLowerCase();
+      let salary = parseFloat(emp.querySelector(`[id^='salary-']`).innerText);
+
+      return name.includes(nameVal) &&
+             role.includes(roleVal) &&
+             salary >= minSalary &&
+             salary <= maxSalary;
+    })
+    .forEach(emp => emp.style.display = "block");
 }
+
 
 function searchEmployee() {
   let searchVal = document.getElementById("searchName").value.toLowerCase();
