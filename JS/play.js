@@ -16,11 +16,9 @@ function add_emp() {
   var statusField = document.getElementById("status");
   var statusText = statusField.value;
 
-  var salaryField = document.getElementById("salary");
-  var salaryValue = salaryField.value;
+const salaryField = document.getElementById("salary");
+const salaryValue = salaryField.value;
 
-  const salaryField = document.getElementById("salary");
-  const salaryValue = salaryField.value;
 
   let errorDiv = document.getElementById("errorMsg");
   if (!errorDiv) {
