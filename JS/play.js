@@ -19,6 +19,31 @@ function add_emp() {
   var salaryField = document.getElementById("salary");
   var salaryValue = salaryField.value;
 
+  const salaryField = document.getElementById("salary");
+  const salaryValue = salaryField.value;
+
+  let errorDiv = document.getElementById("errorMsg");
+  if (!errorDiv) {
+    errorDiv = document.createElement("div");
+    errorDiv.setAttribute("id", "errorMsg");
+    errorDiv.style.color = "red";
+    document.querySelector("form").appendChild(errorDiv);
+  }
+  errorDiv.innerText = "";
+
+  const nameRegex = /^[A-Za-z ]{3,}$/;
+  const roleRegex = /^[A-Za-z ]{3,}$/;
+  const salaryRegex = /^[0-9]{1,7}$/;
+
+  if (
+    !nameRegex.test(nameText) ||
+    !roleRegex.test(roleText) ||
+    !salaryRegex.test(salaryValue)
+  ) {
+    errorDiv.innerText = "⚠ Please fill out all fields correctly!";
+    return;
+  }
+
   if (nameText != "" && roleText != "" && statusText != "") {
     // validate empty fields
     if (content.classList.contains("emp")) {
@@ -287,7 +312,6 @@ function add_bonus(id) {
     bonusSpan.style.color = "deeppink";
   }
   document.getElementById(`name-${id}`).style.background = "pink";
-
 }
 
 function updatePayroll() {
@@ -327,18 +351,17 @@ function applyFilter() {
   }
 }
 
-
-
 function searchEmployee() {
   let searchVal = document.getElementById("searchName").value.toLowerCase();
-  let result = empsArray.find(emp => {
+  let result = empsArray.find((emp) => {
     let name = emp.querySelector(`[id^='name-']`).innerText.toLowerCase();
     return name === searchVal;
   });
 
   let resultDiv = document.getElementById("searchResult");
   if (result) {
-    resultDiv.innerText = "Employee Found: " + result.querySelector(`[id^='role-']`).innerText;
+    resultDiv.innerText =
+      "Employee Found: " + result.querySelector(`[id^='role-']`).innerText;
     resultDiv.style.color = "green";
   } else {
     resultDiv.innerText = "Employee Not Found!";
