@@ -1,10 +1,43 @@
+/* تصميم بسيط جدًا - مبتدئ في CSS */
 .active{
     background-color: greenyellow;
+    padding: 5px;
+    margin: 2px;
 }
 .terminated{
     background-color: grey;
+    padding: 5px;
+    margin: 2px;
 }
-
 .onLeave{
     background-color: red;
+    padding: 5px;
+    margin: 2px;
+}
+
+.table {
+    border: 1px solid black;
+    width: 80%;
+}
+
+.table div {
+    margin: 3px 0;
+}
+
+input {
+    margin: 3px;
+}
+
+form {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    margin-bottom: 10px;
 }
