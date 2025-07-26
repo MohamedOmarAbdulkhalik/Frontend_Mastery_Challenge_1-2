@@ -4,12 +4,7 @@ let deletedArray = [];
 let empsArray = [];
 
 let counter = 0;
-// content.addEventListener("onclick",()=>{
-//   console.log("Hay")
 
-// })
-// content.onclick = ()=>{
-// }
 function add_emp() {
   counter++;
   var nameField = document.getElementById("name");
@@ -20,6 +15,9 @@ function add_emp() {
 
   var statusField = document.getElementById("status");
   var statusText = statusField.value;
+
+  var salaryField = document.getElementById("salary");
+  var salaryValue = salaryField.value;
 
   if (nameText != "" && roleText != "" && statusText != "") {
     // validate empty fields
@@ -37,6 +35,10 @@ function add_emp() {
       roleSpan.setAttribute("id", `role-${counter}`);
       roleSpan.innerText = roleText;
 
+      var salarySpan = document.createElement("span");
+      salarySpan.setAttribute("id", `salary-${counter}`);
+      salarySpan.innerText = salaryValue + " R";
+
       var editButton = document.createElement("input");
       editButton.setAttribute("type", "button");
       editButton.setAttribute("value", "Edit");
@@ -49,7 +51,12 @@ function add_emp() {
       deleteButton.setAttribute("id", `delete-${counter}`);
       deleteButton.setAttribute("onclick", `delete_emp(${counter})`);
 
-      empDiv.append(nameSpan, roleSpan, editButton, deleteButton);
+      var bonusButton = document.createElement("input");
+      bonusButton.setAttribute("type", "button");
+      bonusButton.setAttribute("value", "Bonus");
+      bonusButton.setAttribute("onclick", `add_bonus(${counter})`);
+
+      empDiv.append(nameSpan, roleSpan, editButton, deleteButton,salarySpan, bonusButton);
 
       switch (statusText) {
         case "active":
@@ -66,6 +73,8 @@ function add_emp() {
       }
 
       content.appendChild(empDiv);
+      updatePayroll();
+
       //empsArray.push(empDiv)
 
       //console.log(nameText, roleText, statusText, counter, empDiv);
@@ -195,19 +204,18 @@ function show_trash() {
     const editBtn = item.querySelector(`#edit-${item.id.split("-")[1]}`);
     const deleteBtn = item.querySelector(`#delete-${item.id.split("-")[1]}`);
 
-      editBtn.value = "Restore";
-      editBtn.onclick = function () {
-        empsArray.push(item);
-        deletedArray.splice(deletedArray.indexOf(item), 1);
-        content.removeChild(item);
-      };
+    editBtn.value = "Restore";
+    editBtn.onclick = function () {
+      empsArray.push(item);
+      deletedArray.splice(deletedArray.indexOf(item), 1);
+      content.removeChild(item);
+    };
 
-      deleteBtn.value = "Premenent Deletion";
-      deleteBtn.onclick = function () {
-        deletedArray.splice(deletedArray.indexOf(item), 1);
-        content.removeChild(item);
-      };
-    
+    deleteBtn.value = "Premenent Deletion";
+    deleteBtn.onclick = function () {
+      deletedArray.splice(deletedArray.indexOf(item), 1);
+      content.removeChild(item);
+    };
   }
 }
 
@@ -248,4 +256,35 @@ function show_emps() {
       }
     }
   }
+}
+
+
+
+function add_bonus(id) {
+  let percentage = prompt("Enter bonus percentage:");
+  if (percentage !== null && !isNaN(percentage) && percentage !== "") {
+    let salaryText = document.getElementById(`salary-${id}`).innerText;
+    let salary = parseFloat(salaryText);
+    let bonus = (salary * parseFloat(percentage)) / 100;
+
+    let bonusSpan = document.getElementById(`bonus-${id}`);
+    if (!bonusSpan) {
+      bonusSpan = document.createElement("span");
+      bonusSpan.setAttribute("id", `bonus-${id}`);
+      document.getElementById(`emp-${id}`).appendChild(bonusSpan);
+    }
+    bonusSpan.innerText = `Bonus: ${bonus.toFixed(2)} R`;
+    bonusSpan.style.color = "deeppink";
+  }
+}
+
+
+
+function updatePayroll() {
+  let total = 0;
+  for (let i = 0; i < content.children.length; i++) {
+    let salaryText = content.children[i].querySelector(`[id^='salary-']`).innerText;
+    total += parseFloat(salaryText);
+  }
+  document.getElementById("totalPayroll").innerText = total + " R";
 }
